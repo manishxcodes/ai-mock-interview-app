@@ -1,10 +1,8 @@
-import { Navbar } from "./components/Navbar"
-
 function App() {
 
   return (
-    <div>
-      <Navbar />
+    <div className="h-100 w-full flex justify-center p-4">
+      hello
     </div>
   )
 }
