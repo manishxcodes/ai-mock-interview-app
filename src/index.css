@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Parkinsans:wght@300..800&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -277,6 +278,9 @@
   --color-sidebar-border: var(--sidebar-border);
 
   --color-sidebar-ring: var(--sidebar-ring);
+
+  /* add font */
+  --font-parkinsans: "Parkinsans", sans-serif 
 }
 
 @layer base {
