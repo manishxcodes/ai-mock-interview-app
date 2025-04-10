@@ -1,18 +1,16 @@
 import { cn } from "@/lib/utils"
-import { useAuth } from "@clerk/clerk-react"
+import { useAuth, useUser } from "@clerk/clerk-react"
 import { Container } from "../Container"
 import { Bot } from "lucide-react"
 import { LogoContainer } from "./LogoContainer"
 import { useState } from "react"
-import { NavLinks } from "./NavLinks"
 import { ProfileContainer } from "./ProfileContainer"
 import { Darktheme } from "./Darktheme"
-import { HamburgerMenu } from "./HamburgerMenu"
 
-const Header = () => {
+
+const Header =  () => {
   const { userId  } = useAuth();
   const [isVisible, setIsVisible] = useState(false)
-  
 
     return (
       <nav className={cn("w-full border-b duration-150 transition-all ease-in-out")}>
@@ -22,16 +20,16 @@ const Header = () => {
           </div>
            
           {/* navlinks */}
-          <div className={cn("hidden md:flex items-center gap-3")}>
+          {/* <div className={cn("hidden md:flex items-center gap-3")}>
             <NavLinks />
-          </div>
+          </div> */}
 
           
         {/* cta */}
         <div className="flex items-center gap-1">
           <Darktheme />
           <ProfileContainer />
-          <HamburgerMenu />
+          {/* <HamburgerMenu /> */}
         </div>
         </Container>
       </nav>
