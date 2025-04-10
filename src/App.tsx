@@ -2,8 +2,8 @@ import { BrowserRouter as  Router, Routes, Route } from 'react-router'
 import PublicLayout from "./layouts/public-layout"
 import HomePage from "./pages/HomePage"
 import { AuthenticatedLayout } from './layouts/auth-layout'
-import { SignIn } from './pages/Signin'
-import { SignUp } from './pages/Signup'
+import { SignUp } from './pages/SignUp'
+import { SignIn } from './pages/SignIn'
 import { ProtectedLayout } from './layouts/protected-layout'
 import MainLayout from './layouts/main-layout'
 
