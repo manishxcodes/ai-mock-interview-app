@@ -1,91 +1,78 @@
 import { Loader } from "@/components/Loader";
-import { db } from "@/config/firebase.config";
+import { customFirebaseTokenLink, db } from "@/config/firebase.config";
 import { User } from "@/types";
 import { useAuth, useUser } from "@clerk/clerk-react";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router";
-import { getAuth, signInWithCustomToken } from "firebase/auth"
-import axios from 'axios'
+import { getAuth, signInWithCustomToken } from "firebase/auth";
+import axios from 'axios';
 
 export const AuthHandler = () => {
-    const { isSignedIn, getToken } = useAuth();
-    const firebaseAuth = getAuth();
-    const { user } = useUser();
+  const { isSignedIn, getToken } = useAuth();
+  const { user } = useUser();
+  const firebaseAuth = getAuth();
 
+  const [loading, setLoading] = useState(true);
 
-    const pathname = useLocation().pathname;
-    const navigate = useNavigate();
+  useEffect(() => {
+    const initAuthFlow = async () => {
+      try {
+        if (!isSignedIn || !user) return;
 
-    const [token, setToken] = useState<String | null>(null);
-    const [loading, setLoading] = useState(false);
+        // 1. Get Clerk JWT token
+        const token = await getToken();
+        if (!token) return;
 
-    useEffect(() => {
-        async() => {
-            if(isSignedIn) {
-                const token = await getToken();
-                setToken(token);
-            }
+        // 2. Get custom Firebase token
+        const { data } = await axios.post(
+          `${customFirebaseTokenLink}`,
+          { clerkUserId: user.id },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const firebaseToken = data.firebaseToken;
+        // console.log("Firebase token:", firebaseToken);
+
+        // 3. Sign in with Firebase custom token
+        if (!firebaseAuth.currentUser) {
+          const credentials = await signInWithCustomToken(firebaseAuth, firebaseToken);
+          // console.log("Firebase credentials:", credentials);
         }
-    }, [isSignedIn])
 
-    console.log("token: ", token);
-    console.log("user: ", user);
+        // 4. Check/create user in Firestore
+        const userDocRef = doc(db, "users", user.id);
+        const userSnap = await getDoc(userDocRef);
 
-    useEffect(() => {
-        (async () => {
-            if(!firebaseAuth.currentUser) {
-                (async function FirebaeSignIn() {
-                    const response = await axios.post("https://clerk-firebase-auth.prasadmanish467.workers.dev/firebase-token", {clerkUserId: user?.id}, {
-                    headers: {
-                        "Content-Type": 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    }
-                    });
-                    const customFirebaseToken = response.data;
-            
-                    await signInWithCustomToken(firebaseAuth, customFirebaseToken);
-                })();
-            }
-        })
-    }, [firebaseAuth, user, token])
-    
+        if (!userSnap.exists()) {
+          const userData: User = {
+            id: user.id,
+            name: user.fullName || user.firstName || "Anonymous",
+            email: user.primaryEmailAddress?.emailAddress || "N/A",
+            imageUrl: user.imageUrl,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          };
 
-
-    useEffect(() => {
-        console.log("inside")
-        const storeUserData = async() => {
-            console.log("isnide 1")
-            if(isSignedIn && user) {
-                setLoading(true);
-                try {
-                    // get userdata from db
-                    const userSnap = await getDoc(doc(db, "users", user.id));
-
-                    // if user doesnot exist create new user
-                    if(!userSnap.exists()) {
-                        const userData: User = {
-                            id: user.id,
-                            name: user.fullName || user.firstName || "Anynomous",
-                            email: user.primaryEmailAddress?.emailAddress || "N/A",
-                            imageUrl: user.imageUrl,
-                            createdAt: serverTimestamp(),
-                            updatedAt: serverTimestamp()
-                        }
-                        const response = await setDoc(doc(db, "users", user.id), userData);
-                        console.log(response);
-                    }
-                } catch(err) {
-                    console.log("Error on storing the user data: ", err);
-                } finally {
-                    setLoading(false);
-                }
-            }
+          await setDoc(userDocRef, userData);
+          console.log("User created in Firestore.");
+        } else {
+          console.log("User already exists in Firestore.");
         }
-        storeUserData();
-    }, [isSignedIn, user, pathname, navigate]);
+      } catch (err) {
+        console.error("Error during auth handling:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-    if(loading) return <Loader />
+    initAuthFlow();
+  }, [isSignedIn, user]);
 
-    return null;
-}
+  if (loading) return <Loader />;
+  return null;
+};
