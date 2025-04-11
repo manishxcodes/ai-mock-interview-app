@@ -26,7 +26,7 @@ const Header =  () => {
 
           
         {/* cta */}
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-4">
           <Darktheme />
           <ProfileContainer />
           {/* <HamburgerMenu /> */}
