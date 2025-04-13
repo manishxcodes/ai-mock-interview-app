@@ -6,17 +6,24 @@ import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import axios from 'axios';
+import { useNavigate } from "react-router";
 
 export const AuthHandler = () => {
   const { isSignedIn, getToken } = useAuth();
   const { user } = useUser();
   const firebaseAuth = getAuth();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+
+    
     const initAuthFlow = async () => {
       try {
+
+        if (loading) return <Loader />;
+        
         if (!isSignedIn || !user) return;
 
         // 1. Get Clerk JWT token
@@ -36,13 +43,13 @@ export const AuthHandler = () => {
         );
 
         const firebaseToken = data.firebaseToken;
-        // console.log("Firebase token:", firebaseToken);
+        console.log("Firebase token:", firebaseToken);
+        console.log("user: ", user);
+        console.log("firebase.curentuser: ", firebaseAuth.currentUser)
 
         // 3. Sign in with Firebase custom token
-        if (!firebaseAuth.currentUser) {
           const credentials = await signInWithCustomToken(firebaseAuth, firebaseToken);
-          // console.log("Firebase credentials:", credentials);
-        }
+          console.log("Firebase credentials:", credentials.user.uid);
 
         // 4. Check/create user in Firestore
         const userDocRef = doc(db, "users", user.id);
@@ -63,6 +70,10 @@ export const AuthHandler = () => {
         } else {
           console.log("User already exists in Firestore.");
         }
+
+        // navigate to dashboard
+        navigate('/dashboard');  
+
       } catch (err) {
         console.error("Error during auth handling:", err);
       } finally {
@@ -73,6 +84,5 @@ export const AuthHandler = () => {
     initAuthFlow();
   }, [isSignedIn, user]);
 
-  if (loading) return <Loader />;
   return null;
 };
