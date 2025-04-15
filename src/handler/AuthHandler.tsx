@@ -21,10 +21,7 @@ export const AuthHandler = () => {
     
     const initAuthFlow = async () => {
       try {
-
-        if (loading) return <Loader />;
-        
-        if (!isSignedIn || !user) return;
+        if (!isSignedIn || !user)  return;
 
         // 1. Get Clerk JWT token
         const token = await getToken();
@@ -84,5 +81,6 @@ export const AuthHandler = () => {
     initAuthFlow();
   }, [isSignedIn, user]);
 
+  if (loading) return <Loader />;
   return null;
 };
