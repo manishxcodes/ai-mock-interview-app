@@ -69,7 +69,7 @@ export const AuthHandler = () => {
         }
 
         // navigate to dashboard
-        navigate('/dashboard');  
+        navigate('/generate');  
 
       } catch (err) {
         console.error("Error during auth handling:", err);
