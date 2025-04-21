@@ -4,7 +4,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { Interview, formSchema, FormData } from "@/types"
 
 import { CustomBreadCrumb } from "./custom-breadcrumb";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "@clerk/clerk-react";
 
@@ -17,10 +17,14 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/f
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
+import { chatSession } from "@/lib/gen-ai";
+
+import { addDoc, collection, doc, serverTimestamp, updateDoc } from "firebase/firestore";
+import { db } from "@/config/firebase.config";
+
 interface InterviewFormProps {
     initialData?: Interview | null;
 }
-
 
 export const InterviewForm = ({initialData}: InterviewFormProps) => {
   const form = useForm<FormData>({
@@ -38,7 +42,6 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { userId } = useAuth();
-
   const title = initialData?.position
                   ? initialData.position 
                   : "Create a new Mock Interview";
@@ -49,14 +52,97 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
                         ? { title: "Updated!", description: "Changes saved successfully!" }  
                         : { title: "Created!", description: "New Mock Interview Created"};
 
+// for cleaning the AI response
+  const cleanAIResponse = (responseText: string) => {
+    // Step 1: Trim any surrounding whitespace
+    let cleanText = responseText.trim();
+
+    // Step 2: Remove any occurrences of "json" or code block symbols (``` or `)
+    cleanText = cleanText.replace(/(json|```|`)/g, "");
+
+    // Step 3: Extract a JSON array by capturing text between square brackets
+    const jsonArrayMatch = cleanText.match(/\[.*\]/s);
+    if (jsonArrayMatch) {
+      cleanText = jsonArrayMatch[0];
+    } else {
+      throw new Error("No JSON array found in response");
+    }
+
+    // Step 4: Parse the clean JSON text into an array of objects
+    try {
+      return JSON.parse(cleanText);
+    } catch (error) {
+      throw new Error("Invalid JSON format: " + (error as Error)?.message);
+    }
+  };
+
+  // generate question & answer from AI
+  const generateAIResponse = async(data: FormData) => {
+    const prompt = `
+    As an experienced prompt engineer, generate a JSON array containing 8 technical interview questions along with detailed answers based on the following job information. 
+    
+    IMPORTANT: The response must be a valid JSON array. Make sure all quotes, commas, and brackets are correctly placed.
+    
+    Format the array exactly like this:
+    [
+      { "question": "Question text here", "answer": "Answer text here" },
+      { "question": "Another question", "answer": "Another answer" }
+    ]
+    
+    Job Information:
+    - Job Position: ${data?.position}
+    - Job Description: ${data?.description}
+    - Years of Experience Required: ${data?.experience}
+    - Tech Stacks: ${data?.techStack}
+    
+    The questions should assess skills in ${data?.techStack} development and best practices, problem-solving, and experience handling complex requirements. Return only the JSON array with questions and answers.
+    `;
+
+    const aiResponse = await chatSession.sendMessage(prompt);
+    const cleanedAIResponse = cleanAIResponse(aiResponse.response.text())
+    console.log(cleanedAIResponse)
+    return cleanedAIResponse;
+  }
+
   const onSubmit = async (data: FormData) => {
     try {
       setLoading(true);
-      console.log(data);
+      if(initialData) {
+        // update 
+        const aiResult = await generateAIResponse(data);
 
-    } catch(error) {
+        await updateDoc(doc(db, "interviews", initialData?.id), {
+          questions: aiResult,
+          ...data,
+          updatedAt: serverTimestamp()
+        });
+        toast(toastMessage.title, {description: toastMessage.description});
+
+      } else {
+        // create a new interview
+        if(isValid) {
+          const aiResult = await generateAIResponse(data);
+          
+          //save to db
+          const interviewRef = await addDoc(collection(db, "interviews"), {
+            ...data,
+            userId,
+            questions: aiResult,
+            createdAt: serverTimestamp(),
+          });
+          console.log("interviewRef: ",interviewRef);
+
+          toast(toastMessage.title, {description: toastMessage.description});
+
+        }
+      }
+
+      navigate("/generate", {replace: true})
+
+    } catch(error: any) {
       toast.error("Error", {description: "Something went wrong. Please try again"});
       console.log("Error while generating interview", "details: ", {error})
+
     } finally {
       setLoading(false);
     }
