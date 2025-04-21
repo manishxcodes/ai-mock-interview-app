@@ -17,8 +17,6 @@ export const AuthHandler = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-
-    
     const initAuthFlow = async () => {
       try {
         if (!isSignedIn || !user)  return;
@@ -40,9 +38,7 @@ export const AuthHandler = () => {
         );
 
         const firebaseToken = data.firebaseToken;
-        console.log("Firebase token:", firebaseToken);
-        console.log("user: ", user);
-        console.log("firebase.curentuser: ", firebaseAuth.currentUser)
+        localStorage.setItem("firebaseToken", firebaseToken);
 
         // 3. Sign in with Firebase custom token
           const credentials = await signInWithCustomToken(firebaseAuth, firebaseToken);
