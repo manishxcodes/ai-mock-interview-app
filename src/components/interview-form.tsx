@@ -4,7 +4,7 @@ import { FormProvider, useForm } from "react-hook-form"
 import { Interview, formSchema, FormData } from "@/types"
 
 import { CustomBreadCrumb } from "./custom-breadcrumb";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuth } from "@clerk/clerk-react";
 
@@ -37,6 +37,21 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
     }, 
     mode: "onChange"
   });
+
+  
+  // inside the component:
+  useEffect(() => {
+    if (initialData) {
+      form.reset({
+        position: initialData.position || "",
+        description: initialData.description || "",
+        experience: initialData.experience || 0,
+        techStack: initialData.techStack || ""
+      });
+    }
+  }, [initialData, form]);
+
+  console.log("intialdatainside interview form: ", initialData);
 
   const {isValid, isSubmitting} = form.formState;
   const [loading, setLoading] = useState(false);
@@ -189,7 +204,7 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
                         className="h-10"
                         placeholder="e.g: Frontend Developer"
                         {...field}
-                        value={field.value || ""} />
+                        value={field.value ?? ""} />
                      </FormControl>
                   </FormItem>
                 )}
@@ -212,7 +227,7 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
                         className="h-10"
                         placeholder="describe your job role or position"
                         {...field}
-                        value={field.value || ""} />
+                        value={field.value ?? ""} />
                      </FormControl>
                   </FormItem>
                 )}
@@ -235,7 +250,7 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
                         className="h-10"
                         placeholder="e.g: 5 years"
                         {...field}
-                        value={field.value || ""}/>
+                        value={field.value ?? ""}/>
                      </FormControl>
                   </FormItem>
                 )}
@@ -258,7 +273,7 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
                         className="h-10"
                         placeholder="e.g: typescript, react, express, etc"
                         {...field}
-                        value={field.value || ""} />
+                        value={field.value ?? ""} />
                      </FormControl>
                   </FormItem>
                 )}
