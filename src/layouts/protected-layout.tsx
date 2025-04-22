@@ -1,4 +1,4 @@
-import { Loader } from "@/components/Loader";
+
 import { useAuth } from "@clerk/clerk-react"
 import { getAuth, signInWithCustomToken } from "firebase/auth";
 import { useEffect } from "react";
