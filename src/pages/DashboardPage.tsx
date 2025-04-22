@@ -31,16 +31,11 @@ export const DashboardPage = () => {
         const q = query(interviewsRef, where("userId", "==", userId));
         const querySnapshot = await getDocs(q);
 
-        console.log("querySnapshot: ", querySnapshot.docs[0].data());
-
       // Process the data correctly
       const data: Interview[] = querySnapshot.docs.map(doc => ({
         id: doc.id, 
         ...(doc.data() as Omit<Interview, 'id'>),
       }));
-
-      console.log("questions: ", data);
-      
       setInterviews(data);
       } catch (err) {
         console.error("Error fetching interviews:", err);
@@ -77,13 +72,23 @@ export const DashboardPage = () => {
         </Container>
       }
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      { interviews.length == 0
+        ? <div className="flex flex-col gap-4 items-center justify-center h-96">
+            <h3 className="font-semibold text-2xl">No interviews</h3>
+            <Link to={"create"}>
+              <Button size={"sm"} >
+                <Plus /> Add New
+              </Button>
+            </Link> 
+          </div> 
+        : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {
           interviews.map((interview) => (
             <InterviewCard key={interview.id} interview={interview} />
           ))
         }
-      </div>
+       </div>
+      }
     </>
   )
 }
