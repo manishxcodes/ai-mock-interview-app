@@ -7,16 +7,16 @@ import { db } from "@/config/firebase.config";
 import { InterviewForm } from "@/components/interview-form";
 
 export const CreatePage = () => {
-  const { interviewId } = useParams<{interviewId: string}>();
+  const { id } = useParams<{id: string}>();
   const [interview, setInterview] = useState<Interview | null>(null);
 
   useEffect(() => {
     const fetchInterview = async () => {
-      if(interviewId) {
+      if(id) {
         try {
-          const interviewDoc = await getDoc(doc(db, "interview", interviewId));
+          const interviewDoc = await getDoc(doc(db, "interviews", id));
           if(interviewDoc.exists()) {
-          setInterview({...interviewDoc.data} as Interview );
+          setInterview({...interviewDoc.data()} as Interview );
         }
         } catch (error) {
           console.log("Error while getting interview", {details: error})
@@ -24,7 +24,9 @@ export const CreatePage = () => {
       }
     }
     fetchInterview();
-  }, [interviewId])
+  }, [id])
+
+  console.log(interview);
 
   return (
     <Container>
