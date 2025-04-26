@@ -5,17 +5,18 @@ import { Interview } from "@/types"
 import { useUser } from "@clerk/clerk-react"
 import { Separator } from "@radix-ui/react-separator"
 import { collection, getDocs, query, where } from "firebase/firestore"
-import { Loader, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link } from "react-router"
 import { Container } from "@/components/Container"
 import InterviewCard from "@/components/interview-card"
+import { Loader } from "@/components/Loader"
 
 export const DashboardPage = () => {
   const user = useUser();
   const userId = user?.user?.id
   
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [interviews, setInterviews] = useState<Interview[]>([]);
 
   useEffect(() => {
@@ -64,30 +65,30 @@ export const DashboardPage = () => {
 
       <Separator className="my-10" />
 
-      {  loading && 
-        <Container >
-          <div className="w-full h-96 flex justify-center items-center">
-            < Loader />
-          </div>
-        </Container>
-      }
-
-      { interviews.length == 0
-        ? <div className="flex flex-col gap-4 items-center justify-center h-96">
-            <h3 className="font-semibold text-2xl">No interviews</h3>
-            <Link to={"create"}>
-              <Button size={"sm"} >
-                <Plus /> Add New
-              </Button>
+      { loading 
+        ? ( 
+          <Container >
+            <div className="w-full flex flex-col flex-1 justify-center items-center">
+              < Loader />
+            </div>
+          </Container>
+        )
+        : (interviews.length > 0) 
+          ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {
+            interviews.map((interview) => (
+              <InterviewCard key={interview.id} interview={interview} variant={"default"} />
+            ))
+          }
+         </div>
+          : <div className="flex flex-col gap-4 items-center justify-center h-20">
+              <h3 className="font-semibold text-2xl">No interviews</h3>
+              <Link to={"create"}>
+                <Button size={"sm"} >
+                  <Plus /> Add New
+                </Button>
             </Link> 
-          </div> 
-        : <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {
-          interviews.map((interview) => (
-            <InterviewCard key={interview.id} interview={interview} />
-          ))
-        }
-       </div>
+          </div>
       }
     </>
   )
