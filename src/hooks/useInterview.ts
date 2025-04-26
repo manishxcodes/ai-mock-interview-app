@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 
 export const useInterview = (id: string | undefined) => {
     const [interview, setInterview] = useState<Interview | null>(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null)
 
     useEffect(() => {
