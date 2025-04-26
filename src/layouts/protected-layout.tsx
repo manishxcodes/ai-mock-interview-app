@@ -9,8 +9,13 @@ export const ProtectedLayout = ({children}: {children: React.ReactNode}) => {
     const navigate = useNavigate();
     const firebaseAuth = getAuth();
 
+    // check if user is signed-in
+    if(!isSignedIn) navigate('/signin');
+
     // signin with firebase
     useEffect(() => {
+
+
         const firebaseSignin = async () => {
             const firebaseToken = localStorage.getItem("firebaseToken")!;
 
@@ -19,9 +24,6 @@ export const ProtectedLayout = ({children}: {children: React.ReactNode}) => {
         }
         firebaseSignin();
     }, [])
-
-    // check if user is signed-in
-    if(!isSignedIn) navigate('/signin');
 
     return children;
 }
