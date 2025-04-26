@@ -1,7 +1,6 @@
 import { ArrowUpRight, FilePenLine, Pen, Trash } from "lucide-react"
 import { Link } from "react-router"
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -15,64 +14,70 @@ import { Badge } from "./ui/badge"
 import { TooltipButton } from "./tooltip-button"
 
 interface InterviewCardProps {
-    interview: Interview
+    interview: Interview,
+    variant?: "default" | "full", // 👈 added variant prop
 }
 
-
-const InterviewCard = ({  interview}: InterviewCardProps) => {
+const InterviewCard = ({ interview, variant = "default" }: InterviewCardProps) => {
     const techStackArray = interview.techStack.split(",");
-    console.log(techStackArray)
     const timestamp = interview.createdAt;
 
-    // Convert to JavaScript Date object
     const date = timestamp.toDate();
 
-    // Format the date for display
     const formattedDate = date.toLocaleDateString('en-US', { 
-    year: 'numeric', 
-    month: 'short', 
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
+
+    const isFull = variant === "full";
+
     return (
-        <Card className={cn("", )} >
+        <Card className={cn(isFull ? "w-full" : "")}>
           <CardHeader>
             <div className="flex justify-between items-center">
-                <CardTitle>{interview.position}</CardTitle>
-                <Link to={'/'} >
-                    <TooltipButton icon={<Trash className="text-primary" />} label={"Delete Interview"} />
-                </Link>
+              <CardTitle>{interview.position}</CardTitle>
+              <Link to="/">
+                <TooltipButton icon={<Trash className="text-primary" />} label="Delete Interview" />
+              </Link>
             </div>
-            <CardDescription className="mt-2 h-10">{
-                interview.description.length > 60 
-                    ? interview.description.slice(0, 60) + "..."
-                    : interview.description
-            }</CardDescription>
+            <CardDescription className="mt-2 h-10">
+              {interview.description.length > 60 
+                ? interview.description.slice(0, 60) + "..."
+                : interview.description}
+            </CardDescription>
           </CardHeader>
-            <CardContent className="h-20">
-            {
-                techStackArray.map((tech) => (
-                    <Badge className="w-fit m-1 hover:text-primary" key={tech} variant="outline">
-                        {tech}
-                    </Badge>
-                ))
-            }
-            </CardContent>
+
+          <CardContent className={cn(isFull ? "h-fit" : "h-20")}>
+            {techStackArray.map((tech) => (
+              <Badge
+                key={tech}
+                className="w-fit m-1 hover:text-primary cursor-pointer"
+                variant="outline"
+              >
+                {tech}
+              </Badge>
+            ))}
+          </CardContent>
+
+          {!isFull && (
             <CardFooter className="flex justify-between items-center">
-                <CardDescription >{formattedDate}</CardDescription>
-                <div className="flex justify-evenly items-center ">
-                    <Link to={`create/${interview.id}`}>
-                        <TooltipButton icon={<Pen />} label={"Edit"} />
-                    </Link>
-                    <Link to={'/'}>
-                        <TooltipButton icon={<FilePenLine />} label={"Feedback"} />
-                    </Link>
-                    <Link to={`interview/${interview.id}`}>
-                        <TooltipButton icon={<ArrowUpRight />} label={"Interivew"} />
-                    </Link>
-                </div>
+              <CardDescription>{formattedDate}</CardDescription>
+              <div className="flex justify-evenly items-center">
+                <Link to={`create/${interview.id}`}>
+                  <TooltipButton icon={<Pen />} label="Edit" />
+                </Link>
+                <Link to="/">
+                  <TooltipButton icon={<FilePenLine />} label="Feedback" />
+                </Link>
+                <Link to={`interview/${interview.id}`}>
+                  <TooltipButton icon={<ArrowUpRight />} label="Interview" />
+                </Link>
+              </div>
             </CardFooter>
+          )}
         </Card>
     )
 }
