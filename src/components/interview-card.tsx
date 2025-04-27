@@ -40,7 +40,9 @@ const InterviewCard = ({ interview, variant = "default" }: InterviewCardProps) =
             <div className="flex justify-between items-center">
               <CardTitle>{interview.position}</CardTitle>
               <Link to="/">
-                <TooltipButton icon={<Trash className="text-primary" />} label="Delete Interview" />
+                <div className={cn(isFull ? "hidden text-primary" : "text-primary")}>
+                    <TooltipButton icon={<Trash className="text-primary" />} label="Delete Interview" />
+                </div>
               </Link>
             </div>
             <CardDescription className="mt-2 h-10">
