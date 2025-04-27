@@ -8,7 +8,7 @@ interface AlertCardProps {
 
 export const AlertCard = ({title, descriptions}: AlertCardProps) => {
   return (
-    <Alert className="bg-green-50 border-green-400 text-primary">
+    <Alert className="bg-green-50 border-green-400 text-primary dark:bg-accent ">
     <Lightbulb className="h-4 w-4" />
     <AlertTitle className="mb-4">{title}</AlertTitle>
     {
