@@ -41,7 +41,7 @@ const InterviewCard = ({ interview, variant = "default" }: InterviewCardProps) =
               <CardTitle>{interview.position}</CardTitle>
               <Link to="/">
                 <div className={cn(isFull ? "hidden text-primary" : "text-primary")}>
-                    <TooltipButton icon={<Trash className="text-primary" />} label="Delete Interview" />
+                    <TooltipButton icon={<Trash size={16} className="text-primary" />} label="Delete Interview" />
                 </div>
               </Link>
             </div>
@@ -67,15 +67,15 @@ const InterviewCard = ({ interview, variant = "default" }: InterviewCardProps) =
           {!isFull && (
             <CardFooter className="flex justify-between items-center">
               <CardDescription>{formattedDate}</CardDescription>
-              <div className="flex justify-evenly items-center">
+              <div className="flex justify-evenly items-center gap-4">
                 <Link to={`create/${interview.id}`}>
-                  <TooltipButton icon={<Pen />} label="Edit" />
+                  <TooltipButton icon={<Pen size={14} />} label="Edit" />
                 </Link>
                 <Link to="/">
-                  <TooltipButton icon={<FilePenLine />} label="Feedback" />
+                  <TooltipButton icon={<FilePenLine size={14} />} label="Feedback" />
                 </Link>
                 <Link to={`interview/${interview.id}`}>
-                  <TooltipButton icon={<ArrowUpRight />} label="Interview" />
+                  <TooltipButton icon={<ArrowUpRight size={14} />} label="Interview" />
                 </Link>
               </div>
             </CardFooter>
