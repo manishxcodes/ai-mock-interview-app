@@ -1,53 +1,18 @@
 import { Button } from "@/components/ui/button"
 import { Heading } from "@/components/ui/Heading"
-import { db } from "@/config/firebase.config"
-import { Interview } from "@/types"
 import { useUser } from "@clerk/clerk-react"
 import { Separator } from "@radix-ui/react-separator"
-import { collection, getDocs, query, where } from "firebase/firestore"
 import { Plus } from "lucide-react"
-import { useEffect, useState } from "react"
 import { Link } from "react-router"
 import { Container } from "@/components/Container"
 import InterviewCard from "@/components/interview-card"
 import { Loader } from "@/components/Loader"
+import { useInterviewData } from "@/context/InterviewDataContext"
 
 export const DashboardPage = () => {
   const user = useUser();
-  const userId = user?.user?.id
-  
-  const [loading, setLoading] = useState(true);
-  const [interviews, setInterviews] = useState<Interview[]>([]);
 
-  useEffect(() => {
-    const fetchInterviews = async () => {
-      if (!userId) return;
-
-      setLoading(true);
-
-      try {
-        const interviewsRef = collection(db, "interviews");
-
-        // Query interviews where userId matches the logged-in user
-        const q = query(interviewsRef, where("userId", "==", userId));
-        const querySnapshot = await getDocs(q);
-
-      // Process the data correctly
-      const data: Interview[] = querySnapshot.docs.map(doc => ({
-        id: doc.id, 
-        ...(doc.data() as Omit<Interview, 'id'>),
-      }));
-      setInterviews(data);
-      } catch (err) {
-        console.error("Error fetching interviews:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchInterviews();
-  }, [userId]);
-
+  const {interviews, loading} = useInterviewData()
   return (
     <>
       <div className="w-full flex items-center justify-between">
