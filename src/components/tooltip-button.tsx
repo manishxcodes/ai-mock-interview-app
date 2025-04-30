@@ -8,7 +8,7 @@ import {
 import React from "react"
 
 interface TooltipButtonProps {
-    icon: React.ReactNode
+    icon?: React.ReactNode
     label: string
 }
 
@@ -17,7 +17,7 @@ export function TooltipButton({icon, label}: TooltipButtonProps) {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button className="cursor-pointer text-gray-700 hover:text-primary" variant={'link'}>{icon}</Button>
+          <span className="cursor-pointer text-gray-700 hover:text-primary" >{icon}</span>
         </TooltipTrigger>
         <TooltipContent>
           <p>{label}</p>
