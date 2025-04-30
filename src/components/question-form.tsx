@@ -4,14 +4,15 @@ import { TooltipButton } from "./tooltip-button";
 import { ArrowUpRight, Volume1, Volume2 } from "lucide-react";
 import { Button } from "./ui/button";
 import { RecordAnswer } from "./record-answer";
+import { DialogBox } from "./dialog";
 
 interface QuestionFormProps {
     questions: { question: string, answer: string }[]
+    id: string
 }
 
-export const QuestionForm = ({questions}: QuestionFormProps) => {
+export const QuestionForm = ({questions, id}: QuestionFormProps) => {
     const [isPlaying, setIsPlaying] = useState(false);
-    const [isWebCamEnabled, setisWebCamEnabled] = useState(false);
     const [currentSpeech, setCurrentSpeech] = useState<SpeechSynthesisUtterance | null >(null);
 
     // for playing quetion audio
@@ -79,17 +80,22 @@ export const QuestionForm = ({questions}: QuestionFormProps) => {
               </div>
             
               <div>
-                <RecordAnswer question={tab} isWebCamEnabled={isWebCamEnabled} setIsWebCamEnabled={setisWebCamEnabled} />
+                <RecordAnswer question={tab} />
               </div>
             </TabsContent>
           ))}
         </Tabs>
       </div>
         {/* final submit button */}
-        <div className="flex justify-end items-center">
-          <Button variant={'outline'} className="mt-4 border-primary">Feedback
-            <ArrowUpRight />
-          </Button>
+        <div className="flex justify-end items-center mt-4">
+          <DialogBox 
+            triggerLabel={"Feedback"} 
+            icon={<ArrowUpRight size={14}/>}
+            title={"You want to see feedback?"}
+            description={"Make sure to give answer for all the question."} 
+            link={`/generate/feedback/${id}`}
+            action={"Go to feedback"}
+            />
         </div>
     </>
   )
