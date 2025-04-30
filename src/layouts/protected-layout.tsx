@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 
 export const ProtectedLayout = ({children}: {children: React.ReactNode}) => {
-    const {isLoaded, isSignedIn} = useAuth();
+    const {isSignedIn} = useAuth();
     const navigate = useNavigate();
     const firebaseAuth = getAuth();
 
@@ -14,8 +14,6 @@ export const ProtectedLayout = ({children}: {children: React.ReactNode}) => {
 
     // signin with firebase
     useEffect(() => {
-
-
         const firebaseSignin = async () => {
             const firebaseToken = localStorage.getItem("firebaseToken")!;
 
