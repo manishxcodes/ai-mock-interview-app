@@ -14,13 +14,6 @@ import { UserAnswer, UserAnswers } from '@/types';
 
 interface RecordAnswerProps {
     question: {question: string, answer: string};
-    isWebCamEnabled: boolean;
-    setIsWebCamEnabled: (value: boolean) => void
-}
-
-interface AIResponse {
-    ratings: number;
-    feedback: string;
 }
 
 export const RecordAnswer = ({question}: RecordAnswerProps) => {
@@ -30,7 +23,6 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
     const [isAnswerShort, setIsAnswerShort] = useState(false);
     const [isAIGenerating, setIsAIGenerating] = useState(false);
     const [isAnswered, setIsAnswered] = useState(false)
-    const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [isWebCamEnabled, setIsWebCamEnabled] = useState(false);
 
@@ -151,6 +143,7 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
                 // if doc exists update answer array
                 await updateDoc(userDocRef, {answers: arrayUnion(userAnswerData)});
                 toast.success("Saved", { description: "Your answer has been saved." });
+                setIsAnswered(true);
             } else {
                 // if doc doesn't exists, create
                 await setDoc(userDocRef, {
@@ -161,7 +154,7 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
                     updatedAt: serverTimestamp()
                 });
                 toast.success("Saved", { description: "Your answer has been saved." });
-
+                setIsAnswered(true);
             }
         } catch(err) {
             console.log("error while saving answer", {details: err});
@@ -212,29 +205,35 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
         </div>
         
         {/* answer section */}
-        <div className='w-full flex flex-col mt-4 p-4 border rounded-md bg-gray-50 dark:bg-gray-800'>
-            <h2  className='text-lg font-semibold'>Your Answer</h2>
-            <p className='text-sm mt-2 whitespace-normal'>
-                {listening && <Badge variant={"default"}>listening.....</Badge>}
-                {!listening && !transcript && "Start recording to see your answer"}
-            </p>
-
-            { listening 
-                ? <p>{transcript}</p>
-                : <p>{userAnswer}</p>
-            }
-            
-            <div className='flex items-center gap-2 justify-end mt-4'>
-                <Button size={"sm"} disabled={listening || !transcript || loading || isAnswered} variant={'outline'} className='' onClick={reset} >
-                        Reset
-                </Button>
-                <Button
-                    disabled={listening || !transcript || isAnswerShort || loading || isAnswered } 
-                    size={"sm"} 
-                    onClick={saveAnswer}>Save
-                </Button> 
+        {
+            isAnswered
+            ?<div className='w-full flex flex-col mt-4 p-4 border rounded-md bg-gray-50 dark:bg-gray-800'>
+                <h1>You have already answered. Move to the next question.</h1>
             </div>
-        </div>
+            : <div className='w-full flex flex-col mt-4 p-4 border rounded-md bg-gray-50 dark:bg-gray-800'>
+                <h2  className='text-lg font-semibold'>Your Answer</h2>
+                <p className='text-sm mt-2 whitespace-normal'>
+                    {listening && <Badge variant={"default"}>listening.....</Badge>}
+                    {!listening && !transcript && "Start recording to see your answer"}
+                </p>
+
+                { listening 
+                    ? <p>{transcript}</p>
+                    : <p>{userAnswer}</p>
+                }
+                
+                <div className='flex items-center gap-2 justify-end mt-4'>
+                    <Button size={"sm"} disabled={listening || !transcript || loading || isAnswered} variant={'outline'} className='' onClick={reset} >
+                            Reset
+                    </Button>
+                    <Button
+                        disabled={listening || !transcript || isAnswerShort || loading || isAnswered } 
+                        size={"sm"} 
+                        onClick={saveAnswer}>Save
+                    </Button> 
+                </div>
+            </div>
+        }
     </div>
     );
 }
