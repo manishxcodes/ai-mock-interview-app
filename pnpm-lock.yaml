@@ -83,6 +83,9 @@ importers:
       react-router:
         specifier: ^7.4.1
         version: 7.4.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      react-speech-recognition:
+        specifier: ^4.0.0
+        version: 4.0.0(react@19.1.0)
       react-webcam:
         specifier: ^7.2.0
         version: 7.2.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -2315,6 +2318,11 @@ packages:
     peerDependenciesMeta:
       react-dom:
         optional: true
+
+  react-speech-recognition@4.0.0:
+    resolution: {integrity: sha512-hz1OsRhjAW70rOMVXN84PR+1L2I1j8xS1TXpwpd4vlDaRY9i/LbAaxEklqscgObECTTuyxNeGBdVdcq/pX3bqQ==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   react-style-singleton@2.2.3:
     resolution: {integrity: sha512-b6jSvxvVnyptAiLjbkWLE/lOnR4lfTtDAl+eUC7RZy+QQWc6wRzIV2CE6xBuMmDxc2qIihtDCZD5NPOFl7fRBQ==}
@@ -4776,6 +4784,10 @@ snapshots:
       turbo-stream: 2.4.0
     optionalDependencies:
       react-dom: 19.1.0(react@19.1.0)
+
+  react-speech-recognition@4.0.0(react@19.1.0):
+    dependencies:
+      react: 19.1.0
 
   react-style-singleton@2.2.3(@types/react@19.1.0)(react@19.1.0):
     dependencies:
