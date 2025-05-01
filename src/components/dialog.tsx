@@ -22,11 +22,11 @@ export const DialogBox = ({triggerLabel, icon, title, description, link, action}
   return (
     <Dialog>
         <DialogTrigger>
-            <Button
-             variant={'outline'} className="mt-4 border-primary">
+            <span
+                className="flex items-center justify-center mt-4 border border-primary gap-1 p-2 rounded-md">
                 {triggerLabel}
                 {icon}
-          </Button>
+          </span>
         </DialogTrigger>
         <DialogContent>
             <DialogHeader>
