@@ -71,8 +71,7 @@ export const Feedback = () => {
             <div>
               <Heading title={"No answers"} description={"Please answer all the questions"} isSubHeading />
             </div>
-          )
-            
+          )  
         }
         
         {
