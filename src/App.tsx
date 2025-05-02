@@ -10,12 +10,13 @@ import { DashboardPage } from './pages/DashboardPage'
 import { CreatePage } from './pages/CreatePage'
 import { InterviewLoadPage } from './pages/InterviewLoadPage'
 import { Generate } from './components/Generate'
-import { MockInterviewPage } from './pages/MockInterviewPage'
 import { InterviewDataProvider } from './context/InterviewDataContext'
 import { Feedback } from './pages/Feedback'
+import React from 'react'
 
 
 function App() {
+  const InterviewPage = React.lazy(() => import('@/pages/MockInterviewPage'))
 
   return (
     <Router>
@@ -46,7 +47,7 @@ function App() {
             <Route path='create' element={<CreatePage />} />
             <Route path='create/:id' element={<CreatePage />} />
             <Route path='interview/:id' element={<InterviewLoadPage />} />
-            <Route path='interview/:id/start' element={<MockInterviewPage />} />
+            <Route path='interview/:id/start' element={<InterviewPage />} />
             <Route path="feedback/:id" element={<Feedback />} />
           </Route>
         </Route>
