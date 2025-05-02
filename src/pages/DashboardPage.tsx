@@ -42,7 +42,10 @@ export const DashboardPage = () => {
           ? <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {
             interviews.map((interview) => (
-              <InterviewCard key={interview.id} interview={interview} variant={"default"} />
+              <InterviewCard key={interview.id} interview={interview} variant={"default"} 
+              interviewId={interview.id}
+              userId={user.user?.id}
+              />
             ))
           }
          </div>
