@@ -12,18 +12,22 @@ import {
 import { Interview } from "@/types"
 import { Badge } from "./ui/badge"
 import { TooltipButton } from "./tooltip-button"
+import { deleteDoc, doc, getDoc } from "firebase/firestore"
+import { db } from "@/config/firebase.config"
+import { toast } from "sonner"
+import { useInterviewData } from "@/context/InterviewDataContext"
 
 interface InterviewCardProps {
     interview: Interview,
-    variant?: "default" | "full", // 👈 added variant prop
+    variant?: "default" | "full", 
+    interviewId?: string,
+    userId?: string
 }
 
-const InterviewCard = ({ interview, variant = "default" }: InterviewCardProps) => {
+const InterviewCard = ({ interview, variant = "default", interviewId, userId }: InterviewCardProps) => {
     const techStackArray = interview.techStack.split(",");
     const timestamp = interview.createdAt;
-
     const date = timestamp.toDate();
-
     const formattedDate = date.toLocaleDateString('en-US', { 
       year: 'numeric', 
       month: 'short', 
@@ -31,19 +35,54 @@ const InterviewCard = ({ interview, variant = "default" }: InterviewCardProps) =
       hour: '2-digit',
       minute: '2-digit'
     });
-
     const isFull = variant === "full";
+    const {fetchInterviews} = useInterviewData();
+
+    const onDelete = async (interviewId: string, userId: string) => {
+      console.log('yo')
+      try {
+        const interviewRef = await doc(db, "interviews", interviewId);
+        const interviewSnap = await getDoc(interviewRef);
+        const userAnswerRef = await doc(db, "userAnswers", `${userId}_${interviewId}`);
+        const userAnswerSnap = await getDoc(userAnswerRef);
+
+        // check if interview exists
+        if(!interviewSnap.exists()) {
+          toast.error("Document doesnot exist")
+        }
+        
+        // if exists delete
+        if(interviewSnap.exists()) {
+          await deleteDoc(interviewRef);
+        }
+        if(userAnswerSnap.exists()) {
+          await deleteDoc(userAnswerRef)
+        }
+
+        toast("Interview deleted !")
+        fetchInterviews();
+      } catch(err) {
+        toast.error("Cannot delete", {description: "Please try again"})
+      }
+    }
 
     return (
         <Card className={cn(isFull ? "w-full" : "")}>
           <CardHeader>
             <div className="flex justify-between items-center">
               <CardTitle>{interview.position}</CardTitle>
-              <Link to="/">
                 <div className={cn(isFull ? "hidden text-primary" : "text-primary")}>
-                    <TooltipButton icon={<Trash size={16} className="text-primary" />} label="Delete Interview" />
+                    <TooltipButton icon={
+                      <Trash 
+                      onClick={ () => {
+                          if(interviewId && userId) {
+                            onDelete(interviewId, userId);
+                          }
+                        }
+                      }
+                      size={16} className="text-primary" />
+                      } label="Delete Interview" />
                 </div>
-              </Link>
             </div>
             <CardDescription className="mt-2 h-10">
               {interview.description.length > 60 
