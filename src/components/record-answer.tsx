@@ -21,7 +21,6 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
 
     const [userAnswer, setUserAnswer] = useState("");
     const [isAnswerShort, setIsAnswerShort] = useState(false);
-    const [isAIGenerating, setIsAIGenerating] = useState(false);
     const [isAnswered, setIsAnswered] = useState(false)
     const [loading, setLoading] = useState(false);
     const [isWebCamEnabled, setIsWebCamEnabled] = useState(false);
@@ -110,13 +109,10 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
         setLoading(true);
 
         // get review from ai 
-        setIsAIGenerating(true);
         const aiResponse = await generateReview({  
             ...question,
             user_answer: userAnswer
         });
-        setIsAIGenerating(false);
-        console.log("aiResponse" ,aiResponse)
 ;
         if(!aiResponse) {
             setLoading(false);
@@ -203,7 +199,7 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
             </div>
             {/* webcam ends */}
         </div>
-        
+                  
         {/* answer section */}
         {
             isAnswered
