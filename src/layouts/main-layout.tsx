@@ -1,4 +1,3 @@
-import Footer from "@/components/Footer"
 import Header from "@/components/header/Header"
 import { Container } from "@/components/Container"
 import { Outlet } from "react-router"
