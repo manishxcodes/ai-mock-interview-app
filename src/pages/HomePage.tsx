@@ -3,6 +3,7 @@ import { GradientButton } from "@/components/ui/gradient-button"
 import demoPhoto from "@/assets/mock-interview-img.png"
 import { FAQ } from "@/components/faq"
 import { easeOut, motion } from "motion/react"
+import { Link } from "react-router"
 
 
 const HomePage = () => {
@@ -38,7 +39,9 @@ const HomePage = () => {
               delay: 0.3
             }}
             >
-            <GradientButton label={"Take Interview"} />
+            <Link to={'/signin'}>
+              <GradientButton label={"Take Interview"} />
+            </Link>
             </motion.div>
             <motion.div className="w-[80%] mt-20  px-2 py-2 rounded-xl bg-zinc-100 dark:bg-zinc-900"
             initial={{y:20, opacity: 0}}
