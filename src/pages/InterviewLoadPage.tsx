@@ -47,12 +47,14 @@ export const InterviewLoadPage = () => {
           <Button className="underline" variant={'link'}>Go to dashboard</Button>
         </Link>
         <div>
+        <div className="w-full flex mb-4">
           <AlertCard  
           title={"Importance Information"} 
           descriptions={
             ['Note:Your video is never recorded. You can disable your webcam at anytime.']
             } 
           />
+        </div>
           <div className="flex items-center justify-between w-full gap-2">
             <InterviewCard interview={interview} variant={"full"} />
           </div>
