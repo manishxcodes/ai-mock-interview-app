@@ -5,7 +5,7 @@ import { useInterview } from "@/hooks/useInterview";
 import { Link, useNavigate, useParams } from "react-router"
 import { toast } from "sonner";
 
-export const MockInterviewPage = () => {
+const MockInterviewPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -46,3 +46,5 @@ export const MockInterviewPage = () => {
         </div>
     )
 }
+
+export default MockInterviewPage;
