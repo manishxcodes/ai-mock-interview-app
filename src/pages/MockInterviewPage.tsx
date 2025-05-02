@@ -39,7 +39,7 @@ export const MockInterviewPage = () => {
         <div className="w-full">
            { interview?.questions && interview.questions.length > 0 && (
                 <div>
-                    <QuestionForm questions={interview?.questions} />
+                    <QuestionForm questions={interview?.questions} id={id!}/>
                 </div>
             )
            }
