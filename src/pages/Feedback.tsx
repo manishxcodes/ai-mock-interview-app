@@ -65,6 +65,15 @@ export const Feedback = () => {
         <div className="flex flex-col w-full">
           <Heading title="Interview Feedback" isSubHeading />
         </div>
+
+        {
+          userAnswers?.answers.length == 0 && (
+            <div>
+              <Heading title={"No answers"} description={"Please answer all the questions"} isSubHeading />
+            </div>
+          )
+            
+        }
         
         {
           userAnswers?.answers && (
