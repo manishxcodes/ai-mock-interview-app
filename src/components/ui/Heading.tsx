@@ -7,10 +7,10 @@ interface HeadingProps {
 }
 
 
-export const Heading = ({title, description, isSubHeading}: HeadingProps) => {
+export const Heading = ({title, description, isSubHeading=false}: HeadingProps) => {
   return (
     <div>
-        <h2 className={cn("text-2xl md:text-3xl text-gray-800 font-semibold mb-2", isSubHeading && "text-lg md:text-xl mb-2")}>
+        <h2 className={cn("text-lg md:text-3xl text-gray-800 dark:text-gray-300 font-semibold mb-2", isSubHeading && "text-lg md:text-xl mb-2")}>
             {title}
         </h2>
         { description && (
