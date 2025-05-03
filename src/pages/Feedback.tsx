@@ -82,19 +82,19 @@ export const Feedback = () => {
                   <AccordionItem 
                     key={ans.question}
                     value={ans.question}
-                    className="border rounded-lg shadow-md">
+                    className="border rounded-lg shadow-md dark:bg-gray-800">
                       <AccordionTrigger
                         onClick={() => setActiveFeed(ans.question)}
                       className={cn(
-                        "px-5 py-3 flex items-center justify-between  rounded-t-lg transition-colors hover:no-underline",
+                        "px-5 py-3 flex items-center justify-between  rounded-t-lg transition-colors dark:bg-gray-600hover:no-underline",
                         (activeFeed === ans.question)
-                          ? "bg-gradient-to-r from-purple-50 to-blue-50"
-                          : "hover:bg-gray-50"
+                          ? "bg-gray-900 dark:bg-gray-900"
+                          : "hover:bg-gray-50 dark:hover:bg-gray-600"
                       )}>
                         <span>{ans.question}</span>
                       </AccordionTrigger>
 
-                      <AccordionContent className="px-5 py-6 bg-white rounded-b-lg space-y-5 shadow-inner">
+                      <AccordionContent className="px-5 py-6 bg-white dark:bg-gray-900 rounded-b-lg space-y-5 shadow-inner">
                         <div className="text-lg font-semibold to-gray-700">
                           <Star className="inline mr-2 text-yellow-400" />
                           Rating : {ans.rating}
