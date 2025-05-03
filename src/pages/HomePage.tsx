@@ -1,6 +1,6 @@
 import { Container } from "@/components/Container"
 import { GradientButton } from "@/components/ui/gradient-button"
-import demoPhoto from "@/assets/mock-interview-img.png"
+import demoPhoto from "@/assets/mock-interview-img.jpg"
 import { FAQ } from "@/components/faq"
 import { easeOut, motion } from "motion/react"
 import { Link } from "react-router"
