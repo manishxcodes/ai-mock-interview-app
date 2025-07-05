@@ -41,7 +41,7 @@ export const AuthHandler = () => {
         localStorage.setItem("firebaseToken", firebaseToken);
 
         // 3. Sign in with Firebase custom token
-          const credentials = await signInWithCustomToken(firebaseAuth, firebaseToken);
+           await signInWithCustomToken(firebaseAuth, firebaseToken);
           //console.log("Firebase credentials:", credentials.user.uid);
 
         // 4. Check/create user in Firestore

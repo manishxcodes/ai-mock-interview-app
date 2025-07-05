@@ -17,7 +17,7 @@ export const ProtectedLayout = ({children}: {children: React.ReactNode}) => {
         const firebaseSignin = async () => {
             const firebaseToken = localStorage.getItem("firebaseToken")!;
 
-            const credentials = await signInWithCustomToken(firebaseAuth, firebaseToken);
+            await signInWithCustomToken(firebaseAuth, firebaseToken);
             //console.log("Firebase credentials:", credentials.user.uid);
         }
         firebaseSignin();
