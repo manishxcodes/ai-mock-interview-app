@@ -56,7 +56,7 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
                         : { title: "Created!", description: "New Mock Interview Created"};
 
   const onDelete = async (interviewId: string) => {
-    console.log('yo')
+    //console.log('yo')
     try {
       const userAnswerRef = await doc(db, "userAnswers", `${userId}_${interviewId}`);
       const userAnswerSnap = await getDoc(userAnswerRef);
@@ -67,7 +67,7 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
 
       fetchInterviews();
     } catch(err) {
-      console.log("error while delete user answer", {details: err})
+      //console.log("error while delete user answer", {details: err})
     }
   }
 
@@ -99,7 +99,7 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
             questions: aiResult,
             createdAt: serverTimestamp(),
           });
-          console.log("interviewRef: ",interviewRef);
+          //console.log("interviewRef: ",interviewRef);
 
           toast(toastMessage.title, {description: toastMessage.description});
           fetchInterviews();
@@ -109,7 +109,7 @@ export const InterviewForm = ({initialData}: InterviewFormProps) => {
 
     } catch(error: any) {
       toast.error("Error", {description: "Something went wrong. Please try again"});
-      console.log("Error while generating interview", "details: ", {error})
+      //console.log("Error while generating interview", "details: ", {error})
 
     } finally {
       setLoading(false);

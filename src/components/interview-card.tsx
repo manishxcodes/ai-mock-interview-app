@@ -39,7 +39,7 @@ const InterviewCard = ({ interview, variant = "default", interviewId, userId }: 
     const {fetchInterviews} = useInterviewData();
 
     const onDelete = async (interviewId: string, userId: string) => {
-      console.log('yo')
+      //console.log('yo')
       try {
         const interviewRef = await doc(db, "interviews", interviewId);
         const interviewSnap = await getDoc(interviewRef);

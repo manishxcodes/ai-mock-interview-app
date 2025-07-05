@@ -72,7 +72,7 @@ export const generateReview = async({question, answer, user_answer}: generateRev
         return cleanResponse;
 
     } catch (err) {
-        console.error("error occurred while generating feedback" ,{details: err});
+        //console.error("error occurred while generating feedback" ,{details: err});
         toast.error("Error", {
           description: "An error occurred while generating feedback.",
         });

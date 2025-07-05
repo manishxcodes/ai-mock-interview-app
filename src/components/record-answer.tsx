@@ -33,9 +33,9 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
         const requestMicPermission = async () => {
             try {
                 await navigator.mediaDevices.getUserMedia({audio: true})
-                console.log("Microphone permission granted");
+                //console.log("Microphone permission granted");
             } catch (err) {
-                console.log("Microphone permission denied", {details: err});
+                //console.log("Microphone permission denied", {details: err});
                 toast.error("Microphone permission denied")
             }
         }
@@ -67,7 +67,7 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
 
                 
             } catch(err) {
-                console.log("error while check if already answered: ", {details: err});
+                //console.log("error while check if already answered: ", {details: err});
             }
         };
 
@@ -100,7 +100,7 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
              toast.error("Error" ,{description: "Please use more words"})
             }
             setUserAnswer(transcript);
-            console.log("inside useeffect: ", transcript);
+            //console.log("inside useeffect: ", transcript);
         }
        
     }, [listening, transcript])
@@ -129,7 +129,7 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
             rating: aiResponse.ratings
         };
 
-        console.log("userdata: ", userAnswerData);
+        //console.log("userdata: ", userAnswerData);
 
         try {
             const userDocRef = doc(db, "userAnswers", `${userId}_${id}`);
@@ -153,7 +153,7 @@ export const RecordAnswer = ({question}: RecordAnswerProps) => {
                 setIsAnswered(true);
             }
         } catch(err) {
-            console.log("error while saving answer", {details: err});
+            //console.log("error while saving answer", {details: err});
             toast.error("Error", {description: "Error while saving your answer"});
             setLoading(false);
         } finally {

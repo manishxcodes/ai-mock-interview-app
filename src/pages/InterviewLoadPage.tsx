@@ -40,7 +40,7 @@ export const InterviewLoadPage = () => {
       )
     }
 
-    console.log("interview: ", interview?.position)
+    //console.log("interview: ", interview?.position)
   return (
     <div className="flex flex-col w-full gap-8">
         <Link to={'/generate'}>

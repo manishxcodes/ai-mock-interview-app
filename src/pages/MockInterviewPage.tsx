@@ -34,7 +34,7 @@ const MockInterviewPage = () => {
       )
     }
 
-    console.log(interview);
+    //console.log(interview);
     return (
         <div className="w-full">
            { interview?.questions && interview.questions.length > 0 && (

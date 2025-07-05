@@ -20,7 +20,7 @@ export const InterviewDataProvider = ({children}: {children: ReactNode}) => {
 
     const fetchInterviews = async () => {
         if(!userId) return;
-        console.log("context used")
+        //console.log("context used")
         try {
             const interviewRef = collection(db, "interviews");
             const q = query(interviewRef, where("userId", "==", userId ));
@@ -35,7 +35,7 @@ export const InterviewDataProvider = ({children}: {children: ReactNode}) => {
 
             setInterviews(data);
         } catch (err) {
-            console.log("error while fetching interview: ", {details: err})
+            //console.log("error while fetching interview: ", {details: err})
         } finally {
             setLoading(false);
         }

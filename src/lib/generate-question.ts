@@ -26,7 +26,7 @@ const cleanAIResponse = (responseText: string) => {
     try {
       return JSON.parse(cleanText);
     } catch (error) {
-      console.error("Failed to parse JSON:", cleanText);
+      //console.error("Failed to parse JSON:", cleanText);
       throw new Error("Invalid JSON format: " + (error as Error)?.message);
     }
   };
@@ -58,10 +58,10 @@ const cleanAIResponse = (responseText: string) => {
     try {
         const aiResponse = await chatSession.sendMessage(prompt);
         const cleanedAIResponse = cleanAIResponse(aiResponse.response.text())
-        console.log("cleanedAIResponse:", cleanAIResponse)
+        //console.log("cleanedAIResponse:", cleanAIResponse)
         return cleanedAIResponse;
     } catch (err) {
-            console.error("error occurred while generating question" ,{details: err});
+            //console.error("error occurred while generating question" ,{details: err});
             toast.error("Error", {
               description: "An error occurred while generating question.",
             });

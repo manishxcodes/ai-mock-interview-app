@@ -20,7 +20,7 @@ export function useFeedback (docID: string) {
                     setUserAnswers(docSnap.data() as UserAnswers);
                 }
             } catch(err) {
-                console.log("Error while fetching userAnswer", {details: err});
+                //console.log("Error while fetching userAnswer", {details: err});
                 setError(err as Error);
             } finally {
                 setLoading(false);

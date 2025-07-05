@@ -8,7 +8,7 @@ export const CreatePage = () => {
   const { id } = useParams<{id: string}>();
   const { interview}  = useInterview(id);
 
-  console.log(interview);
+  //console.log(interview);
 
   return (
     <Container>

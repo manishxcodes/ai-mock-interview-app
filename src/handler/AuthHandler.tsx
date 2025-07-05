@@ -42,7 +42,7 @@ export const AuthHandler = () => {
 
         // 3. Sign in with Firebase custom token
           const credentials = await signInWithCustomToken(firebaseAuth, firebaseToken);
-          console.log("Firebase credentials:", credentials.user.uid);
+          //console.log("Firebase credentials:", credentials.user.uid);
 
         // 4. Check/create user in Firestore
         const userDocRef = doc(db, "users", user.id);
@@ -59,16 +59,16 @@ export const AuthHandler = () => {
           };
 
           await setDoc(userDocRef, userData);
-          console.log("User created in Firestore.");
+          //console.log("User created in Firestore.");
         } else {
-          console.log("User already exists in Firestore.");
+          //console.log("User already exists in Firestore.");
         }
 
         // navigate to dashboard
         navigate('/generate');  
 
       } catch (err) {
-        console.error("Error during auth handling:", err);
+        //console.error("Error during auth handling:", err);
       } finally {
         setLoading(false);
       }

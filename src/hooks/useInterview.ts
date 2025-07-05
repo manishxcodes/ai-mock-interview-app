@@ -23,7 +23,7 @@ export const useInterview = (id: string | undefined) => {
                 }
             } catch(err) {
                 setError(err as Error);
-                console.log("Error while fetching interview: ",{details: err})
+                //console.log("Error while fetching interview: ",{details: err})
             } finally {
                 setLoading(false);
             }
